@@ -46,15 +46,15 @@
           </tr>
         </thead>
         <tbody>
-          {% for contact in vehiculo %}
+          {% for vehiculo in vehiculo %}
           <tr>
-            <td>{{contact.0}}</td>
-            <td>{{contact.1}}</td>
-            <td>{{contact.2}}</td>
-            <td>{{contact.3}}</td>
+            <td>{{vehiculo.0}}</td>
+            <td>{{vehiculo.1}}</td>
+            <td>{{vehiculo.2}}</td>
+            <td>{{vehiculo.3}}</td>
             <td>
-              <a href="/edit/{{contact.0}}" class="btn btn-secondary">edit</a>
-              <a href="/delete/{{contact.0}}" class="btn btn-danger btn-delete">delete</a>
+              <a href="/editv/{{vehiculo.0}}" class="btn btn-secondary">edit</a>
+              <a href="/delete/{{vehiculo.0}}" class="btn btn-danger btn-delete">delete</a>
             </td>
           </tr>
           {% endfor %}

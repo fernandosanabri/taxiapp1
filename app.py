@@ -129,7 +129,8 @@ def add_contact():
         mysql.connection.commit()
         flash('Contact Added successfully')
         return redirect(url_for('conductores'))
-    
+    #editar datos
+
 
 @app.route('/vehiculos')
 def vehiculos():
@@ -151,11 +152,74 @@ def add_auto():
         flash('autos Added successfully')
         return redirect(url_for('vehiculos'))
 
+@app.route('/delete/<string:id>', methods = ['POST','GET'])
+def delete_contact(id):
+    cur = mysql.connection.cursor()
+    cur.execute('DELETE FROM contacts WHERE id = {0}'.format(id))
+    mysql.connection.commit()
+    flash('Contact Removed Successfully')
+    return redirect(url_for('home'))
 
 @app.route('/asignaciones')
 def asignaciones():
  return render_template('asignaciones.html')
 
+ #modulo vehiculo--------------------------------------------
+# editat datos coductor
+@app.route('/edit/<id>', methods = ['POST', 'GET'])
+def get_contact(id):
+    cur = mysql.connection.cursor()
+    cur.execute('SELECT * FROM contacts WHERE id = %s', (id))
+    data = cur.fetchall()
+    cur.close()
+    print(data[0])
+    return render_template('edit-contact.html', contact = data[0])
+# subir datos editados conductor
+@app.route('/update/<id>', methods=['POST'])
+def update_contact(id):
+    if request.method == 'POST':
+        fullname = request.form['fullname']
+        phone = request.form['phone']
+        email = request.form['email']
+        cur = mysql.connection.cursor()
+        cur.execute("""
+            UPDATE contacts
+            SET fullname = %s,
+                email = %s,
+                phone = %s
+            WHERE id = %s
+        """, (fullname, email, phone, id))
+        flash('Contact Updated Successfully')
+        mysql.connection.commit()
+        return redirect(url_for('conductores'))
+# vehiculo edit
+@app.route('/editv/<id_v>', methods = ['POST', 'GET'])
+def get_vehiculo(id_v):
+    cur = mysql.connection.cursor()
+    cur.execute('SELECT * FROM vehiculo WHERE id_v = %s', (id_v))
+    data = cur.fetchall()
+    cur.close()
+    print(data[0])
+    return render_template('edit-vehiculo.html', vehiculo = data[0])
+# subir datos editados vehiculo
+@app.route('/updatevehi/<id_v>', methods=['POST'])
+def update_vehiculo(id_v):
+    if request.method == 'POST':
+        marca = request.form['marca']
+        modelo = request.form['modelo']
+        kilom = request.form['kilom']
+        cur = mysql.connection.cursor()
+        cur.execute("""
+            UPDATE vehiculo
+            SET marca = %s,
+                modelo = %s,
+                kilom = %s
+            WHERE id_v = %s
+        """, (marca, modelo, kilom, id_v))
+        flash('vehicu Updated Successfully')
+        mysql.connection.commit()
+        return redirect(url_for('vehiculos'))
+#fin modulo vehiculo------------------------------------------------------
 
 
 
